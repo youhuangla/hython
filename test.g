@@ -1,4 +1,4 @@
-grammar test; //  same as file name
+grammar test;
 
 options {
     language = C;
@@ -19,7 +19,7 @@ expr: multExpr ((PLUS^ | MINUS^) multExpr)*
 PLUS: '+';
 MINUS: '-';
 
-multExpr
+multExpr 
     : atom (TIMES^ atom)*
     ;
 
@@ -30,19 +30,20 @@ atom: INT
     | '('! expr ')'!
     ;
 
-stmt: expr NEWLINE -> expr  // tree rewrite syntax
-    | ID ASSIGN expr NEWLINE -> ^(ASSIGN ID expr) // tree notation
-    | NEWLINE ->   // ignore
-    ;
-
 ASSIGN: '=';
 
+stmt: expr NEWLINE -> expr // tree rewrite syntax
+    | ID ASSIGN expr NEWLINE -> ^(ASSIGN ID expr)
+    | NEWLINE -> // ignore
+    ;
+
 prog
-    : (stmt {pANTLR3_STRING s = $stmt.tree->toStringTree($stmt.tree);
-             assert(s->chars);
-             printf(" tree \%s\n", s->chars);
-            }
-        )+
+    : ( stmt {
+            pANTLR3_STRING s = $stmt.tree->toStringTree($stmt.tree);
+            assert(s->chars);
+            printf("haizei tree \%s\n", s->chars);
+       }
+      )+
     ;
 
 ID: ('a'..'z'|'A'..'Z')+ ;
